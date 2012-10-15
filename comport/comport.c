@@ -1966,7 +1966,7 @@ void comport_setup(void)
     null_tv.tv_usec = 0;
 #endif /* NOT _WIN32 */
     verbose(-1, "comport - PD external for unix/windows\n"
-        "LGPL 1998-2006,  Winfried Ritsch and others (see LICENSE.txt)\n"
+        "LGPL 1998-2012,  Winfried Ritsch and others (see LICENSE.txt)\n"
         "Institute for Electronic Music - Graz");
 }
 
