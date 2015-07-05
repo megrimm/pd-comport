@@ -240,6 +240,7 @@ static float set_parity(t_comport *x,int n);
 static float set_stopflag(t_comport *x, t_float nr);
 static int set_ctsrts(t_comport *x, int nr);
 static int set_dtr(t_comport *x, int nr);
+static int set_break(t_comport *x, int on);
 static int set_rts(t_comport *x, int nr);
 static int set_xonxoff(t_comport *x, int nr);
 static int set_serial(t_comport *x);
@@ -269,6 +270,7 @@ static void comport_stopbit(t_comport *x,t_floatarg f);
 static void comport_rtscts(t_comport *x,t_floatarg f);
 static void comport_dtr(t_comport *x,t_floatarg f);
 static void comport_rts(t_comport *x,t_floatarg f);
+static void comport_break(t_comport *x,t_floatarg f);
 static void comport_xonxoff(t_comport *x,t_floatarg f);
 static void comport_hupcl(t_comport *x,t_floatarg f);
 static void comport_close(t_comport *x);
@@ -399,6 +401,19 @@ static int set_rts(t_comport *x, int nr)
     HANDLE  fd = x->comhandle;
     BOOL    status;
     DWORD   dwFunc = (nr==0)?CLRRTS:SETRTS;
+
+    if (fd == INVALID_HANDLE_VALUE) return -1;
+
+    status = EscapeCommFunction(fd, dwFunc);
+    if (status != 0) return nr;
+    return -1; /* didn't work, GetLastError tells why */
+}
+
+static int set_break(t_comport *x, int on)
+{
+    HANDLE  fd = x->comhandle;
+    BOOL    status;
+    DWORD   dwFunc = (on==0)?CLRBREAK:SETBREAK;
 
     if (fd == INVALID_HANDLE_VALUE) return -1;
 
@@ -836,6 +851,21 @@ static int set_hupcl(t_comport *x, int nr)
     }
     x->hupcl = nr;
     return 1;
+}
+
+static int set_break(t_comport *x, int on)
+{
+    int fd = x->comhandle;
+    int status;
+
+    if (fd == INVALID_HANDLE_VALUE) return -1;
+
+    if (on == 0)
+      status = ioctl(fd, TIOCCBRK); // Turn break off, that is, stop sending zero bits.
+    else
+      status = ioctl(fd, TIOCSBRK); // Turn break on, that is, start sending zero bits.
+
+    return ((status < 0)? status: (on != 0));
 }
 
 static int open_serial(unsigned int com_num, t_comport *x)
@@ -1556,6 +1586,30 @@ static void comport_rts(t_comport *x,t_floatarg f)
 #endif
 }
 
+static void comport_break(t_comport *x,t_floatarg f)
+{
+    f = set_break(x,f);
+
+    if(x->comhandle == INVALID_HANDLE_VALUE)return;
+
+    if(f < 0)
+    {
+        pd_error(x,"[comport] ** ERROR ** could not set break of device %s\n",
+#ifdef _WIN32
+            &x->serial_device->s_name[4]);
+#else
+            x->serial_device->s_name);
+#endif
+    }
+    else if(x->verbose > 0)
+        post("[comport] set break of %s to %g\n",
+#ifdef _WIN32
+            &x->serial_device->s_name[4], f);
+#else
+            x->serial_device->s_name, f);
+#endif
+}
+
 static void comport_xonxoff(t_comport *x,t_floatarg f)
 {
     f = set_xonxoff(x,f);
@@ -1946,6 +2000,7 @@ void comport_setup(void)
     class_addmethod(comport_class, (t_method)comport_rtscts, gensym("rtscts"), A_FLOAT, 0);
     class_addmethod(comport_class, (t_method)comport_dtr, gensym("dtr"), A_FLOAT, 0);
     class_addmethod(comport_class, (t_method)comport_rts, gensym("rts"), A_FLOAT, 0);
+    class_addmethod(comport_class, (t_method)comport_break, gensym("break"), A_FLOAT, 0);
     class_addmethod(comport_class, (t_method)comport_parity, gensym("parity"), A_FLOAT, 0);
     class_addmethod(comport_class, (t_method)comport_xonxoff, gensym("xonxoff"), A_FLOAT, 0);
     class_addmethod(comport_class, (t_method)comport_hupcl, gensym("hupcl"), A_FLOAT, 0);
