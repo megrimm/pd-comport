@@ -224,8 +224,8 @@ static long baudratetable[] =
             B57600
             B115200
             B230400
-  The  zero  baud rate, B0, is used to terminate the connec­
-  tion.  If B0 is specified, the modem control  lines  shall
+  The  zero  baud rate, B0, is used to terminate the connection.
+  If B0 is specified, the modem control  lines  shall
   no longer be asserted.  Normally, this will disconnect the
   line.*/
 
