@@ -256,7 +256,7 @@ static HANDLE close_serial(t_comport *x);
 static int set_hupcl(t_comport *x, int nr);
 static int open_serial(unsigned int com_num, t_comport *x);
 static int close_serial(t_comport *x);
-static long get_baud_ratebits(t_float *baud);
+static long get_baud_ratebits(long *baud);
 #endif
 static void comport_pollintervall(t_comport *x, t_floatarg g);
 static void comport_tick(t_comport *x);
@@ -683,20 +683,19 @@ int comport_get_cts(t_comport *x)
 #else /* NT */
 /* ----------------- POSIX - UNIX ------------------------------ */
 
-
-static long get_baud_ratebits(t_float *baud)
+static long get_baud_ratebits(long *baud)
 {
     int i = 0;
 
     while(i < BAUDRATETABLE_LEN && baudratetable[i] > *baud) i++;
 
     if(baudratetable[i] != *baud)
-        error("[comport]: %d not valid, using closest value: ", *baud, baudratetable[i]);
+        error("[comport]: %ld not valid, using closest value: %ld", *baud, baudratetable[i]);
 
     /* nearest Baudrate finding */
     if(i==BAUDRATETABLE_LEN ||  baudspeedbittable[i] < 0)
     {
-        error("*Warning* The baud rate %d is not supported or out of range, using 9600\n",*baud);
+        error("*Warning* The baud rate %ld is not supported or out of range, using 9600\n",*baud);
         i = 8;
     }
     *baud =  baudratetable[i];
@@ -704,9 +703,10 @@ static long get_baud_ratebits(t_float *baud)
     return baudspeedbittable[i];
 }
 
-static float set_baudrate(t_comport *x, t_float baud)
+static float set_baudrate(t_comport *x, t_float fbaud)
 {
     struct termios  *tio = &(x->com_termio);
+    long            baud = fbaud;
     speed_t         baudbits = get_baud_ratebits(&baud);
 
     comport_verbose("[comport] set_baudrate: Setting baud rate to %g with baudbits 0x%X", baud, baudbits);
@@ -918,8 +918,8 @@ static int open_serial(unsigned int com_num, t_comport *x)
         x->serial_device = gensym(glob_buffer.gl_pathv[com_num]);
     else
     {
-        pd_error(x, "[comport] ** WARNING ** port #%d does not exist! (max == %d)",
-            com_num,glob_buffer.gl_pathc - 1);
+        pd_error(x, "[comport] ** WARNING ** port #%d does not exist! (max == %lu)",
+                 com_num,(unsigned long)(glob_buffer.gl_pathc - 1));
         return INVALID_HANDLE_VALUE;
     }
     globfree( &(glob_buffer) );
@@ -1256,7 +1256,6 @@ static void comport_list(t_comport *x, t_symbol *s, int argc, t_atom *argv)
 {
     unsigned char   temp_array[COMPORT_BUF_SIZE];/* arbitrary maximum list length */
     int             i, count;
-    int             result;
 
     count = argc;
     if (argc > COMPORT_BUF_SIZE)
@@ -1266,7 +1265,7 @@ static void comport_list(t_comport *x, t_symbol *s, int argc, t_atom *argv)
     }
     for(i = 0; i < count; i++)
         temp_array[i] = ((unsigned char)atom_getint(argv+i))&0xFF; /* brutal conv */
-    result = write_serials(x, temp_array, count);
+    write_serials(x, temp_array, count);
 }
 
 static void *comport_new(t_symbol *s, int argc, t_atom *argv)
