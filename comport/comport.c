@@ -1094,8 +1094,9 @@ static void comport_tick(t_comport *x)
         }
         else
         {
-            err = -1;
             whicherr = GetLastError();
+            if (whicherr != ERROR_IO_PENDING)
+              err = -1;
         }
         CloseHandle(osReader.hEvent);
 #else
