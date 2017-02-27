@@ -1776,7 +1776,7 @@ static void comport_enum(t_comport *x)
 /* now see if it has attributes */
             if ((tcgetattr(fd, &test)) != -1)
                 post("\t%d\t%s", i, glob_buffer.gl_pathv[i]);// this one really exists
-                close (fd);
+            close (fd);
         }
     }
 #endif  /* _WIN32 */
