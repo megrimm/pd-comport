@@ -1323,7 +1323,8 @@ allows COM port numbers to be specified. */
 
 /*	 Open the Comport for RD and WR and get a handle */
 /* this line should use a real serial device */
-#ifdef _MSC_VER
+//#ifdef _MSC_VER
+#ifdef _WIN32
     strncpy_s(test.serial_device_prefix, strlen(serial_device_prefix) + 1, serial_device_prefix, strlen(serial_device_prefix) + 1);
 #else
     strncpy(test.serial_device_prefix, serial_device_prefix, strlen(serial_device_prefix) + 1);
@@ -1345,7 +1346,8 @@ allows COM port numbers to be specified. */
     x = (t_comport *)pd_new(comport_class);
 
     x->comport = test.comport;/* com_num */
-#ifdef _MSC_VER
+//#ifdef _MSC_VER
+#ifdef _WIN32
     strncpy_s(x->serial_device_prefix, strlen(serial_device_prefix) + 1, serial_device_prefix, strlen(serial_device_prefix) + 1);
 #else
     strncpy(x->serial_device_prefix, serial_device_prefix, strlen(serial_device_prefix) + 1);
