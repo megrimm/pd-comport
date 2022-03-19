@@ -16,6 +16,9 @@ Please see testcomport.pd for more help.
 
 compile:
 
+ macOS:
+ For M1 architecture: make arch="arm64 x86_64"
+
  Unix (Linux):   
   make pd_linux,  make pd_irix5, make pd_irix6, make pd_darwin
   should produce a comport.pd_linux, ....
