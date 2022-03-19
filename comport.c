@@ -690,12 +690,12 @@ static long get_baud_ratebits(long *baud)
     while(i < BAUDRATETABLE_LEN && baudratetable[i] > *baud) i++;
 
     if(baudratetable[i] != *baud)
-        error("[comport]: %ld not valid, using closest value: %ld", *baud, baudratetable[i]);
+        pd_error("[comport]: %ld not valid, using closest value: %ld", *baud, baudratetable[i]);
 
     /* nearest Baudrate finding */
     if(i==BAUDRATETABLE_LEN ||  baudspeedbittable[i] < 0)
     {
-        error("*Warning* The baud rate %ld is not supported or out of range, using 9600\n",*baud);
+        pd_error("*Warning* The baud rate %ld is not supported or out of range, using 9600\n",*baud);
         i = 8;
     }
     *baud =  baudratetable[i];
@@ -1148,7 +1148,7 @@ static void comport_tick(t_comport *x)
                  * port gets interrupted, like if the USB gets yanked
                  * out or a bluetooth connection drops */
                 if(x->x_retry_count < x->x_retries)
-                { 
+                {
                     t_atom retrying_atom;
                     SETFLOAT(&retrying_atom, x->x_retry_count);
                     outlet_anything(x->x_status_outlet, gensym("retrying"), 1, &retrying_atom);
@@ -1167,7 +1167,7 @@ static void comport_tick(t_comport *x)
                     comport_close(x);
                 }
             }
-            else 
+            else
                 whicherr = errno;
         }
 #endif /* _WIN32 */
@@ -1236,13 +1236,13 @@ static int write_serial(t_comport *x, unsigned char  serial_byte)
     if(x->comhandle == INVALID_HANDLE_VALUE)
     {
         comport_verbose ("[comport]: Serial port is not open");
-        return 0;         
+        return 0;
     }
     else if(x->x_outbuf_wr_index < x->x_outbuf_len)
     {
         x->x_outbuf[x->x_outbuf_wr_index++] = serial_byte;
         return 1;
-    }    
+    }
     /* handle overrun error */
     pd_error (x, "[comport]: buffer is full");
     return 0;
@@ -1254,7 +1254,7 @@ static int write_serials(t_comport *x, unsigned char *serial_buf, int buf_length
     if(x->comhandle == INVALID_HANDLE_VALUE)
     {
         pd_error (x, "[comport]: Serial port is not open");
-        return 0;         
+        return 0;
     }
     for (i = 0; ((i < buf_length) && (x->x_outbuf_wr_index < x->x_outbuf_len)); ++x->x_outbuf_wr_index, ++i)
         x->x_outbuf[x->x_outbuf_wr_index] = serial_buf[i];
@@ -2046,4 +2046,3 @@ void comport_setup(void)
         "LGPL 1998-2015,  Winfried Ritsch and others (see LICENSE.txt)\n"
         "Institute for Electronic Music - Graz");
 }
-
