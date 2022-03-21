@@ -60,7 +60,7 @@ int bird_data( bird_t *this, unsigned char data );
 void bird_setwritefun(bird_t *this,void (*newwritefun)(void *bird,unsigned char c));
 void bird_send(bird_t *this,unsigned char chr);
 void bird_bang(bird_t *this);
-void bird_set(bird_t *this,char *cmdname,long *cmddata);
+void bird_set(bird_t *this,const char *cmdname,long *cmddata);
 
 
 
@@ -221,7 +221,7 @@ void bird_bang(bird_t *this)
 }
 
 /* set the modes for the bird */
-void bird_set(bird_t *this,char *cmdname,long *cmddata)
+void bird_set(bird_t *this, const char *cmdname,long *cmddata)
 {
   int i,j;
   long data;
@@ -300,7 +300,7 @@ void bird_float(bird_t *x, t_floatarg f)
 void bird_setting(bird_t *x, t_symbol *s, int argc, t_atom *argv)
 {
   int i;
-  char *cmdnam;
+  const char *cmdnam;
   long buffer[ B_MAX_CMDDATA ];
 
   if(argc < 1) return;
