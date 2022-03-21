@@ -481,6 +481,7 @@ static int set_hupcl(t_comport *x, int nr)
     // this is a dummy function since Windows doesn't use HUPCL, AFAIK hans@eds.org
   (void)x;
   (void)nr;
+  return 1;
 }
 
 static HANDLE open_serial(unsigned int com_num, t_comport *x)
