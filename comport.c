@@ -23,6 +23,8 @@ MP 20100201 use a buffer for writes, write takes place during clock callback com
 CR 20190514 disable input processing
 JZ 20210321 purge error() in favour of pd_error()
 JZ 20210321 cleanup t_comport struct
+JZ 20210321 use (int) instead of t_float for members where applicable
+JZ 20210321 allow the user to turn ON input processing (again)
 */
 
 #include "m_pd.h"
