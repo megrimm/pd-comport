@@ -622,7 +622,7 @@ static HANDLE open_serial(unsigned int com_num, t_comport *x)
 
     if (!GetCommTimeouts(fd, &(x->old_timeouts)))
     {
-        pd_error(x, "[comport] Couldn't get old timeouts for serial device (%d)", GetLastError());
+        pd_error(x, "[comport] Couldn't get old timeouts for serial device (%ld)", GetLastError());
     }
 
     /* setting new timeouts for read to immediately return */
@@ -634,12 +634,12 @@ static HANDLE open_serial(unsigned int com_num, t_comport *x)
 
     if (!SetCommTimeouts(fd, &timeouts))
     {
-        pd_error(x, "Couldn't set timeouts for serial device (%d)", GetLastError());
+        pd_error(x, "Couldn't set timeouts for serial device (%ld)", GetLastError());
         return INVALID_HANDLE_VALUE;
     }
     if (!SetupComm(x->comhandle, 4096L, 4096L))/* try to get big buffers to avoid overruns*/
     {
-        pd_error(x, "[comport] Couldn't do SetupComm (%d)", GetLastError());
+        pd_error(x, "[comport] Couldn't do SetupComm (%ld)", GetLastError());
     }
     x->comport = com_num;/* output on next tick */
     return fd;
@@ -1157,7 +1157,7 @@ static void comport_tick(t_comport *x)
         fd_set          com_rfds;
         int             count = 0;
         int             i;
-        int             whicherr = 0;
+        long int        whicherr = 0;
 
         FD_ZERO(&com_rfds);
         FD_SET(fd,&com_rfds);
@@ -1208,7 +1208,7 @@ static void comport_tick(t_comport *x)
         if(err < 0)
         { /* if a read error detected */
             if(x->rxerrors < 10) /* ten times max */
-                pd_error(x, "[comport]: RXERRORS on serial line (%d)\n", whicherr);
+                pd_error(x, "[comport]: RXERRORS on serial line (%ld)\n", (long int)whicherr);
             x->rxerrors++; /* remember */
         }
 /* now if anything to send, send the output buffer */
