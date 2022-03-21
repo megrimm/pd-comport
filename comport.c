@@ -51,7 +51,6 @@ MP 20100201 use a buffer for writes, write takes place during clock callback com
 typedef struct comport
 {
     t_object        x_obj;
-    long            n; /* the state of a last input */
 #ifdef _WIN32
     HANDLE          comhandle; /* holds the comport handle */
     DCB             dcb; /* holds the comm pars */
