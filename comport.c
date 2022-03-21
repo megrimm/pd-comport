@@ -732,13 +732,13 @@ static int set_baudrate(t_comport *x, int ibaud)
 {
     struct termios  *tio = &(x->com_termio);
     long            baud = ibaud;
-    speed_t         baudbits = get_baud_ratebits(x, &baud);
+    long        baudbits = get_baud_ratebits(x, &baud);
 
     comport_verbose("[comport] set_baudrate: Setting baud rate to %g with baudbits 0x%X", baud, baudbits);
     if( cfsetispeed(tio, baudbits) != 0 )
-        pd_error(x, "[comport]: ERROR failed to set bitrate: %d", baudbits);
+        pd_error(x, "[comport]: ERROR failed to set bitrate: %ld", baudbits);
     if( cfsetospeed(tio, baudbits) != 0 )
-        pd_error(x, "[comport]: ERROR failed to set bitrate: %d", baudbits);
+        pd_error(x, "[comport]: ERROR failed to set bitrate: %ld", baudbits);
 
     return baud;
 }
