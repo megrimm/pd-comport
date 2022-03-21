@@ -52,6 +52,9 @@ JZ 20210321 cleanup t_comport struct
 
 #define comport_verbose if(x->verbose > 0)post
 
+
+#define t_bool char
+
 typedef struct comport
 {
   /* basic object properties */
@@ -80,9 +83,9 @@ typedef struct comport
     int             data_bits; /* holds the current number of data bits */
     int             parity_bit; /* holds the current parity */
     t_float         stop_bits; /* holds the current number of stop bits */
-    int             xonxoff; /* nonzero if xonxoff handshaking is on */
-    int             ctsrts; /* nonzero if ctsrts handshaking is on */
-    int             hupcl; /* nonzero if hang-up on close is on */
+    t_bool          xonxoff; /* nonzero if xonxoff handshaking is on */
+    t_bool          ctsrts; /* nonzero if ctsrts handshaking is on */
+    t_bool          hupcl; /* nonzero if hang-up on close is on */
 
     int             rxerrors; /* holds the rx line errors */
     int             verbose;
