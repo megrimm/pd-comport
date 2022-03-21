@@ -1,70 +1,70 @@
-#N canvas 105 260 1181 656 10;
-#X obj 534 458 comport 1 9600;
-#X msg 322 441 66;
-#X msg 280 441 64;
-#X text 319 423 point;
-#X text 277 423 stream;
-#X msg 364 441 86;
-#X text 361 423 position;
-#X msg 426 441 70;
-#X msg 466 441 71;
-#X text 422 423 run;
-#X text 462 423 sleep;
-#X msg 374 61 bits 8;
-#X msg 400 87 stopbit 0;
-#X msg 460 147 parity 0;
-#X text 527 146 parity 1=even \, -1=odd \, 0=off;
-#X text 423 60 databits 5 \, 6 \, 7 \, 8;
-#X obj 534 432 r comctl;
-#X obj 773 478 s comctl;
-#X text 560 166 use handshake xon/off 1=on 0=off;
-#X text 572 186 cts/rts hardwarehandshake 1=on 0=off;
-#X msg 520 207 pollintervall 1;
-#X msg 542 229 close;
-#X msg 563 250 open 1;
-#X text 581 228 Close Serial port;
-#X msg 726 413 devicename /dev/ttyS1;
-#X obj 190 72 hsl 128 15 0 255 0 0 empty empty empty -2 -6 0 8 #fcfcfc
+#N canvas 533 199 1176 693 10;
+#X obj 534 478 comport 1 9600;
+#X msg 322 461 66;
+#X msg 280 461 64;
+#X text 319 443 point;
+#X text 277 443 stream;
+#X msg 364 461 86;
+#X text 361 443 position;
+#X msg 426 461 70;
+#X msg 466 461 71;
+#X text 422 443 run;
+#X text 462 443 sleep;
+#X msg 374 81 bits 8;
+#X msg 400 107 stopbit 0;
+#X msg 460 167 parity 0;
+#X text 527 166 parity 1=even \, -1=odd \, 0=off;
+#X text 423 80 databits 5 \, 6 \, 7 \, 8;
+#X obj 534 452 r comctl;
+#X obj 773 498 s comctl;
+#X text 560 186 use handshake xon/off 1=on 0=off;
+#X text 572 206 cts/rts hardwarehandshake 1=on 0=off;
+#X msg 520 227 pollintervall 1;
+#X msg 542 249 close;
+#X msg 563 270 open 1;
+#X text 581 248 Close Serial port;
+#X msg 726 433 devicename /dev/ttyS1;
+#X obj 190 92 hsl 128 15 0 255 0 0 empty empty empty -2 -6 0 8 #fcfcfc
 #000000 #000000 0 1;
-#X text 610 249 Open serial port by number;
-#X text 879 413 open the serial port by name;
-#X msg 666 353 dtr \$1;
-#X obj 635 354 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
+#X text 610 269 Open serial port by number;
+#X text 879 433 open the serial port by name;
+#X msg 666 373 dtr \$1;
+#X obj 635 374 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
 #000000 0 1;
-#X obj 655 374 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #fc0400
+#X obj 655 394 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #fc0400
 #000000 0 1;
-#X msg 686 373 rts \$1;
-#X text 715 352 dtr output;
-#X text 735 372 rts output;
-#X msg 413 320 help;
-#X msg 645 332 verbose \$1;
-#X obj 614 334 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
+#X msg 686 393 rts \$1;
+#X text 715 372 dtr output;
+#X text 735 392 rts output;
+#X msg 413 340 help;
+#X msg 645 352 verbose \$1;
+#X obj 614 354 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
 #000000 0 1;
-#X text 629 206 set poll interval for read in ms;
-#X msg 367 274 info;
-#X floatatom 615 547 10 0 0 1 baud - - 0;
-#X floatatom 711 624 3 0 0 3 parity - - 0;
-#X floatatom 743 624 3 0 0 2 stop - - 0;
-#X floatatom 775 623 3 0 0 3 data - - 0;
-#X floatatom 871 549 3 0 0 0 port - - 0;
-#X msg 604 291 devices;
-#X obj 187 94 % 255;
-#X floatatom 225 111 5 0 0 0 - - - 0;
-#X text 662 290 print available devices (wait for it...);
-#X obj 183 133 key;
-#X obj 211 150 sel 0;
-#X floatatom 290 167 4 0 0 0 ascii - - 0;
-#X msg 584 271 open 0;
-#X obj 807 553 tgl 15 0 empty empty rts/cts -10 20 1 11 #14e814 #fc2828
+#X text 629 226 set poll interval for read in ms;
+#X msg 367 294 info;
+#X floatatom 615 567 10 0 0 1 baud - - 0;
+#X floatatom 711 644 3 0 0 3 parity - - 0;
+#X floatatom 743 644 3 0 0 2 stop - - 0;
+#X floatatom 775 643 3 0 0 3 data - - 0;
+#X floatatom 871 569 3 0 0 0 port - - 0;
+#X msg 604 311 devices;
+#X obj 187 114 % 255;
+#X floatatom 225 131 5 0 0 0 - - - 0;
+#X text 662 310 print available devices (wait for it...);
+#X obj 183 153 key;
+#X obj 211 170 sel 0;
+#X floatatom 290 187 4 0 0 0 ascii - - 0;
+#X msg 584 291 open 0;
+#X obj 807 573 tgl 15 0 empty empty rts/cts -10 20 1 11 #14e814 #fc2828
 #000000 0 1;
-#X obj 839 569 tgl 15 0 empty empty xon/xoff -14 20 1 11 #14e814 #fc2828
+#X obj 839 589 tgl 15 0 empty empty xon/xoff -14 20 1 11 #14e814 #fc2828
 #000000 0 1;
-#X text 560 623 serial packet format:;
-#X text 748 537 handshaking:;
-#X text 519 572 flow control inputs:;
-#X obj 647 572 tgl 15 0 empty empty dsr 0 20 1 11 #14e814 #fc2828 #000000
+#X text 560 643 serial packet format:;
+#X text 748 557 handshaking:;
+#X text 519 592 flow control inputs:;
+#X obj 647 592 tgl 15 0 empty empty dsr 0 20 1 11 #14e814 #fc2828 #000000
 0 1;
-#X obj 679 572 tgl 15 0 empty empty cts 0 20 1 11 #14e814 #fc2828 #000000
+#X obj 679 592 tgl 15 0 empty empty cts 0 20 1 11 #14e814 #fc2828 #000000
 0 1;
 #N canvas 307 50 789 479 bauds 0;
 #X msg 319 274 baud 57600;
@@ -132,72 +132,88 @@
 #X connect 32 0 24 0;
 #X connect 34 0 28 0;
 #X connect 34 1 30 1;
-#X restore 374 37 pd bauds;
-#X msg 480 167 xonxoff \$1;
-#X obj 447 167 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
+#X restore 374 57 pd bauds;
+#X msg 480 187 xonxoff \$1;
+#X obj 447 187 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
 #000000 0 1;
-#X msg 500 187 rtscts \$1;
-#X obj 468 187 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
+#X msg 500 207 rtscts \$1;
+#X obj 468 207 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
 #000000 0 1;
-#X text 17 -4 comport: a serial port interface;
-#X msg 289 196 13;
-#X obj 903 550 tgl 15 0 empty empty open -6 20 1 11 #14e814 #fc2828
+#X text 17 16 comport: a serial port interface;
+#X msg 289 216 13;
+#X obj 903 570 tgl 15 0 empty empty open -6 20 1 11 #14e814 #fc2828
 #000000 0 1;
-#X msg 625 312 ports;
-#X obj 935 584 print port_list;
-#X text 671 311 list available ports on right outlet;
-#X msg 321 228 48 49 50 51 52 53 54 55 56 57;
-#X text 170 229 send a list of bytes:;
-#X msg 341 248 print hello_world;
-#X text 232 248 send some text:;
-#X msg 706 393 hupcl \$1;
-#X obj 674 394 tgl 15 0 empty empty empty 17 7 0 10 #f8fc00 #fc0400
+#X msg 625 332 ports;
+#X obj 935 604 print port_list;
+#X text 671 331 list available ports on right outlet;
+#X msg 321 248 48 49 50 51 52 53 54 55 56 57;
+#X text 170 249 send a list of bytes:;
+#X msg 341 268 print hello_world;
+#X text 232 268 send some text:;
+#X msg 706 413 hupcl \$1;
+#X obj 674 414 tgl 15 0 empty empty empty 17 7 0 10 #f8fc00 #fc0400
 #000000 0 1;
-#X text 764 386 hang up connection on last close;
-#X text 777 398 (not on Windows);
-#X obj 1032 541 print other;
-#X text 251 196 <CR>:;
-#X text 167 274 status list on right outlet:;
-#X text 290 320 print usage info:;
-#X obj 967 547 tgl 15 0 empty empty hupcl -6 20 1 11 #14e814 #fc2828
+#X text 764 406 hang up connection on last close;
+#X text 777 418 (not on Windows);
+#X obj 1032 561 print other;
+#X text 251 216 <CR>:;
+#X text 167 294 status list on right outlet:;
+#X text 290 340 print usage info:;
+#X obj 967 567 tgl 15 0 empty empty hupcl -6 20 1 11 #14e814 #fc2828
 #000000 0 1;
-#X msg 512 110 1;
-#X msg 542 110 1.5;
-#X msg 573 110 2;
-#X text 504 127 number of stopbits (Windows only);
-#X msg 440 127 stopbit \$1;
-#X text 463 86 extra stopbit 1=on \, 0=off (linux \, MacOS);
-#X text 35 53 You can send bytes directly (0-255):;
-#X text 30 133 or from the terminal:;
-#X text 80 441 messages for the bird patch:;
-#X floatatom 999 560 10 0 0 1 rxerrors - - 0;
-#X obj 615 510 route baud dsr cts parity stop data rtscts xonxoff port
+#X msg 512 130 1;
+#X msg 542 130 1.5;
+#X msg 573 130 2;
+#X text 504 147 number of stopbits (Windows only);
+#X msg 440 147 stopbit \$1;
+#X text 463 106 extra stopbit 1=on \, 0=off (linux \, MacOS);
+#X text 35 73 You can send bytes directly (0-255):;
+#X text 30 153 or from the terminal:;
+#X text 80 461 messages for the bird patch:;
+#X floatatom 999 580 10 0 0 1 rxerrors - - 0;
+#X obj 615 530 route baud dsr cts parity stop data rtscts xonxoff port
 open ports hupcl rxerrors;
-#X text 97 526 2006-2010 Martin Peach;
-#X msg 746 433 retries 10;
-#X text 823 432 how many times to retry a lost connection;
-#X text 862 206 (default is 1 tick 10ms);
-#X msg 502 409 break \$1;
-#X obj 502 388 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
+#X text 97 546 2006-2010 Martin Peach;
+#X msg 746 453 retries 10;
+#X text 823 452 how many times to retry a lost connection;
+#X text 862 226 (default is 1 tick 10ms);
+#X msg 502 429 break \$1;
+#X obj 502 408 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
 #000000 0 1;
-#X text 95 511 (C) 1998-2015 IEM Winfried Ritsch GPL (see LICENSE.txt)
+#X text 95 531 (C) 1998-2015 IEM Winfried Ritsch GPL (see LICENSE.txt)
 ;
-#X obj 107 197 spigot;
-#X obj 146 173 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
+#X obj 107 217 spigot;
+#X obj 146 193 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #f430f0
 #000000 0 1;
-#X text 30 172 ...if this is on;
-#X obj 502 365 delay 50;
-#X obj 470 339 t b b;
-#X obj 470 318 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#X text 30 192 ...if this is on;
+#X obj 502 385 delay 50;
+#X obj 470 359 t b b;
+#X obj 470 338 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
 #000000 #000000;
-#X floatatom 555 341 5 0 0 0 - - - 0;
-#X text 522 388 send break;
-#X text 488 318 send 50ms break;
-#X obj 735 454 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #fc0400
+#X floatatom 555 361 5 0 0 0 - - - 0;
+#X text 522 408 send break;
+#X text 488 338 send 50ms break;
+#X obj 735 474 tgl 15 0 empty empty empty 0 -6 0 8 #e8e828 #fc0400
 #000000 0 1;
-#X msg 766 453 inputprocess \$1;
-#X text 875 450 enable automatic input processing;
-#X text 879 461 (not on Windows \, default: disabled);
+#X msg 766 473 inputprocess \$1;
+#X text 875 470 enable automatic input processing;
+#X text 879 481 (not on Windows \, default: disabled);
+#N canvas 0 0 696 478 creation 0;
+#X text 12 71 creation arguments:;
+#X text 48 117 instead of a numeric deviceID you can also pass a device
+pattern (e.g. "/dev/tty[ASU]*") to specify the available default devices.
+in this case \, the deviceID is assumed to be '0'. This is exspecially
+useful if you want to avoid testing specific devices for their availabilty.
+;
+#X text 140 71 [comport <deviceID> <baudrate>] will try to open the
+given device from the list of default devices \, using the (optional)
+baudrate.;
+#X text 50 192 e.g. to only consider USB-devices use [comport /dev/ttyUSB*]
+;
+#X text 52 224 be aware that device names are hightly platform specific
+\, so if you use such a pattern \, be prepared that you patch might
+no longer work on other operating systems.;
+#X restore 667 59 pd creation arguments;
 #X connect 0 1 93 0;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
