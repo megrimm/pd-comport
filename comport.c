@@ -25,6 +25,7 @@ JZ 20210321 purge error() in favour of pd_error()
 JZ 20210321 cleanup t_comport struct
 JZ 20210321 use (int) instead of t_float for members where applicable
 JZ 20210321 allow the user to turn ON input processing (again)
+JZ 20210321 allow the user to specify a device pattern as creation argument
 */
 
 #include "m_pd.h"
@@ -1351,10 +1352,14 @@ allows COM port numbers to be specified. */
     serial_device_prefix = "/dev/tty[ASU]*";
 #endif /* __linux__ */
 
-    if(argc > 0 && argv->a_type == A_FLOAT)
-        com_num = atom_getfloatarg(0,argc,argv);
+    if(argc > 0) {
+      if (argv->a_type == A_FLOAT)
+        com_num = atom_getfloatarg(0, argc, argv);
+      else
+        serial_device_prefix = atom_getsymbol(argv)->s_name;
+    }
     if(argc > 1)
-        ibaud = atom_getfloatarg(1,argc,argv);
+        ibaud = atom_getfloatarg(1, argc, argv);
 
 /*	 Open the Comport for RD and WR and get a handle */
 /* this line should use a real serial device */
