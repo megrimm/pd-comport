@@ -88,7 +88,8 @@ typedef struct comport
     t_bool          hupcl; /* nonzero if hang-up on close is on */
 
     int             rxerrors; /* holds the rx line errors */
-    int             verbose;
+
+    int             verbose; /* be more verbose */
 
   /* buffers */
     unsigned char   *x_inbuf; /* read incoming serial to here */
