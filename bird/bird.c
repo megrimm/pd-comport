@@ -1,10 +1,10 @@
 /*
 
  bird.c   - PD externals, that controls and parses one flock of bird out of a comport
-         
- Date:  16.01.97          
+
+ Date:  16.01.97
  Author: Winfried Ritsch (see LICENCE.txt)
- 
+
  Institute for Electronic Music - Graz
 
  Desc.:  put the object in a correct parse state and send commands
@@ -25,7 +25,7 @@
 #include <stdio.h>          /* general I/O */
 #include <string.h>         /* for string commands */
 #include "m_pd.h"
- 
+
 #define B_MAX_DATA 32    /* Maximal awaited data per record */
 #define B_MAX_CMDDATA 6  /* Maximum of awaited cmd arguments */
 
@@ -50,7 +50,7 @@ typedef struct {
   char *argname;
   int argc;
   int argv[B_MAX_DATA];
-  
+
   int verbose;
 
 } bird_t;
@@ -60,7 +60,7 @@ int bird_data( bird_t *this, unsigned char data );
 void bird_setwritefun(bird_t *this,void (*newwritefun)(void *bird,unsigned char c));
 void bird_send(bird_t *this,unsigned char chr);
 void bird_bang(bird_t *this);
-void bird_set(bird_t *this,char *cmdname,long *cmddata);
+void bird_set(bird_t *this,const char *cmdname,long *cmddata);
 
 
 
@@ -77,9 +77,9 @@ typedef struct {
 
 
 /* defines Modes for data receiving */
-#define B_MODE_IGNORE 0 
+#define B_MODE_IGNORE 0
 #define B_MODE_POINT  1
-#define B_MODE_STREAM 2 
+#define B_MODE_STREAM 2
 #define B_MODE_EXAM   3
 
 /*#define B_STREAM_ON 1
@@ -93,10 +93,10 @@ typedef struct {
 
 /* cmds accepted by the flock */
 static bird_cmd cmds[]= {
- 
-  /* cmd , value, nr of cmdatabytes, cmddatasize, nr datainbytes 
+
+  /* cmd , value, nr of cmdatabytes, cmddatasize, nr datainbytes
                           data modes, if change always point */
-  {"ANGLES",      'W', 0, 0,  6, B_MODE_POINT}, 
+  {"ANGLES",      'W', 0, 0,  6, B_MODE_POINT},
   {"MATRIX",      'X', 0, 0, 18, B_MODE_POINT},
   {"POSITION",    'V', 0, 0,  6, B_MODE_POINT},
   {"QUATER",     0x5C, 0, 0,  8, B_MODE_POINT},
@@ -156,11 +156,11 @@ int bird_data( bird_t *this, unsigned char data )
     /* STREAM or POINT Mode */
 
     /* Phase was detected */
-    if(this->phase_wait == B_FOUND_PHASE && data < 0x80){ 
+    if(this->phase_wait == B_FOUND_PHASE && data < 0x80){
 
       this->data[this->datacount] = data; /* store data */
       this->datacount++;                  /* increment counter */
-      
+
       if(this->databytes <= this->datacount){ /* last byte of record */
 	this->datacount = 0;
 	this->phase_wait = B_WAIT_PHASE;
@@ -181,8 +181,8 @@ int bird_data( bird_t *this, unsigned char data )
       };
     }
     else{ /* Phase wait */
-      
-      if( (data & 0x80) == 0x00 ){ /* phase bit not found */ 
+
+      if( (data & 0x80) == 0x00 ){ /* phase bit not found */
 	if(this->phase_error == 0)
 	  if(this->verbose)post("phase error:%x",data);
 	this->phase_error++;
@@ -193,7 +193,7 @@ int bird_data( bird_t *this, unsigned char data )
 	this->datacount = 1;              /* wait for next */
 	this->phase_error = 0;            /* phase error reset */
       };
-      
+
     };
   }; /* stream or point mode */
   return 0;
@@ -221,7 +221,7 @@ void bird_bang(bird_t *this)
 }
 
 /* set the modes for the bird */
-void bird_set(bird_t *this,char *cmdname,long *cmddata)
+void bird_set(bird_t *this, const char *cmdname,long *cmddata)
 {
   int i,j;
   long data;
@@ -236,7 +236,7 @@ void bird_set(bird_t *this,char *cmdname,long *cmddata)
   }
 
   /* CMD found */
-  if(cmd->databytes > 0){  /* if databytes awaited, else dont change */
+  if(cmd->databytes > 0){  /* if databytes awaited, else don't change */
 
 	 this->databytes = cmd->databytes; /* expected databytes per record */
 	 this->datacount = 0;              /* start with first */
@@ -256,16 +256,16 @@ void bird_set(bird_t *this,char *cmdname,long *cmddata)
 
 	 bird_send(this,cmd->cmd);
 
-	 for(i=0; i < cmd->cmdbytes;i++){ 
+	 for(i=0; i < cmd->cmdbytes;i++){
 
 		data = cmddata[i];
-		  
+
 		for(j=0; j < cmd->cmdsize;j++){      /* send it bytewise */
 		  bird_send(this, (unsigned char) (data&0xFF));
 		  data >>= 8;
 		};
 	 };
-	 
+
   }
 
   if(this->verbose)post("command %s (%c): databytes=%d, mode=%d, phase=%d",
@@ -286,9 +286,9 @@ void bird_float(bird_t *x, t_floatarg f)
   int n,i;
 
   if((n=bird_data(x,(unsigned char) f)) > 0){
-		  
+
     /* make list and output */
-  			 
+
     for(i=0; i < x->argc ; i++){
       x->x_vec[i].a_type = A_FLOAT;
       x->x_vec[i].a_w.w_float  =  x->argv[i];
@@ -300,8 +300,9 @@ void bird_float(bird_t *x, t_floatarg f)
 void bird_setting(bird_t *x, t_symbol *s, int argc, t_atom *argv)
 {
   int i;
-  char *cmdnam;
+  const char *cmdnam;
   long buffer[ B_MAX_CMDDATA ];
+  (void)s; /* squelch unused-parameter warning */
 
   if(argc < 1) return;
   cmdnam = argv[0].a_w.w_symbol->s_name;
@@ -341,26 +342,26 @@ void *bird_new(void)
   bird_t *x;
 
   x = (bird_t *)pd_new(bird_class);
-  
+
   outlet_new(&x->x_obj, &s_list);
   x->x_out2 = outlet_new(&x->x_obj, &s_float);
 
-  
+
   x->x_vec = (t_atom *)getbytes((x->x_n=B_MAX_DATA)  * sizeof(*x->x_vec));
 
   bird_init(x);
   bird_setwritefun(x,bird_output);
-  
+
   bird_set(x,"RUN",NULL);
-  
+
   bird_set(x,"POSANG",NULL);
   //  out_byte('W');
-  
+
   bird_set(x,"POINT",NULL);
   //  out_byte(64);
-  
+
   x->verbose = 0;
- 
+
   return (void *)x;
 }
 
@@ -370,11 +371,10 @@ void bird_setup(void)
     	(t_method)bird_free, sizeof(bird_t), 0, 0);
 
     /* maximum commandatasize is 6*/
-    class_addmethod(bird_class, (t_method)bird_setting, gensym("set"), A_GIMME, 0); 
-    class_addmethod(bird_class, (t_method)bird_verbose, gensym("verbose"), A_FLOAT, 0); 
+    class_addmethod(bird_class, (t_method)bird_setting, gensym("set"), A_GIMME, 0);
+    class_addmethod(bird_class, (t_method)bird_verbose, gensym("verbose"), A_FLOAT, 0);
 
     class_addbang(bird_class,bird_bang);
 
     class_addfloat(bird_class, bird_float);
 }
-
