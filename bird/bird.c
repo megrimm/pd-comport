@@ -302,6 +302,7 @@ void bird_setting(bird_t *x, t_symbol *s, int argc, t_atom *argv)
   int i;
   const char *cmdnam;
   long buffer[ B_MAX_CMDDATA ];
+  (void)s; /* squelch unused-parameter warning */
 
   if(argc < 1) return;
   cmdnam = argv[0].a_w.w_symbol->s_name;

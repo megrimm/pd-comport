@@ -1276,6 +1276,7 @@ static void comport_list(t_comport *x, t_symbol *s, int argc, t_atom *argv)
 {
     unsigned char   temp_array[COMPORT_BUF_SIZE];/* arbitrary maximum list length */
     int             i, count;
+    (void)s; /* squelch unused-parameter warning */
 
     count = argc;
     if (argc > COMPORT_BUF_SIZE)
@@ -1296,6 +1297,7 @@ static void *comport_new(t_symbol *s, int argc, t_atom *argv)
     const char *serial_device_prefix;
     t_float com_num = 0;
     t_float fbaud = 9600;
+    (void)s; /* squelch unused-parameter warning */
 
 #ifdef _WIN32
 /* According to http://msdn2.microsoft.com/en-us/library/aa363858.aspx To
@@ -1703,6 +1705,7 @@ static void comport_print(t_comport *x, t_symbol *s, int argc, t_atom *argv)
 {
     static char buf[256];
     char        *pch = buf;
+    (void)s; /* squelch unused-parameter warning */
 
     while(argc--)
     {
