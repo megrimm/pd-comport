@@ -78,7 +78,7 @@ typedef struct comport
   /* device configuration */
     int             baud; /* holds the current baud rate */
     int             data_bits; /* holds the current number of data bits */
-    t_float         parity_bit; /* holds the current parity */
+    int             parity_bit; /* holds the current parity */
     t_float         stop_bits; /* holds the current number of stop bits */
     int             xonxoff; /* nonzero if xonxoff handshaking is on */
     int             ctsrts; /* nonzero if ctsrts handshaking is on */
@@ -251,7 +251,7 @@ static void comport_retries(t_comport *x, t_floatarg g);
 static void comport_tick(t_comport *x);
 static int set_baudrate(t_comport *x, int baud);
 static int set_bits(t_comport *x, int nr);
-static float set_parity(t_comport *x,int n);
+static int set_parity(t_comport *x, int n);
 static float set_stopflag(t_comport *x, t_float nr);
 static int set_ctsrts(t_comport *x, int nr);
 static int set_dtr(t_comport *x, int nr);
@@ -341,7 +341,7 @@ static int set_bits(t_comport *x, int nr)
 
 
 /* 1 ... Parity even, -1 parity odd , 0 (default) no parity */
-static float set_parity(t_comport *x,int n)
+static int set_parity(t_comport *x, int n)
 {
     switch(n)
     {
@@ -750,7 +750,7 @@ static int set_bits(t_comport *x, int nr)
 
 
 /* 1 ... Parity even, -1 parity odd , 0 (default) no parity */
-static float set_parity(t_comport *x,int n)
+static int set_parity(t_comport *x, int n)
 {
     struct termios *tio = &(x->com_termio);
 
@@ -1508,9 +1508,9 @@ static void comport_bits(t_comport *x,t_floatarg fbits)
 }
 
 
-static void comport_parity(t_comport *x,t_floatarg f)
+static void comport_parity(t_comport *x,t_floatarg fparity)
 {
-    f = set_parity(x,f);
+    int parity = set_parity(x, fparity);
 
     if(x->comhandle == INVALID_HANDLE_VALUE)return;
 
@@ -1524,13 +1524,13 @@ static void comport_parity(t_comport *x,t_floatarg f)
 #endif
         return;
     }
-    else comport_verbose("[comport] set extra paritybit of %s to %g\n",
+    else comport_verbose("[comport] set extra paritybit of %s to %d\n",
 #ifdef _WIN32
-            &x->serial_device->s_name[4], f);
+            &x->serial_device->s_name[4], parity);
 #else
-            x->serial_device->s_name, f);
+            x->serial_device->s_name, parity);
 #endif
-    x->parity_bit = f;
+    x->parity_bit = parity;
 }
 
 static void comport_stopbit(t_comport *x, t_floatarg fstop)
