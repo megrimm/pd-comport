@@ -14,5 +14,11 @@ USE: There should be a external comport.dll for windows, comport.pd_linux for li
 just copy it to the extra folder of your pd Installation or working directory. 
 Please see testcomport.pd for more help.
 
+build
+
+macOS M1
+$ make arch="arm64 x86_64"
+
+
 If you have improvements or questions feel free to contact me under
 ritsch _at_ iem.at
