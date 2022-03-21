@@ -948,13 +948,19 @@ static int open_serial(unsigned int com_num, t_comport *x)
 
     /* enable input and ignore modem controls */
     new->c_cflag |= (CREAD | CLOCAL);
-
+#if 1
     /* always nocanonical, this means raw i/o no terminal */
     new->c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 
+    /* don't process input */
+    new->c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+
     /* no post processing */
     new->c_oflag &= ~OPOST;
-
+#else
+    /* set to raw mode */
+    cfmakeraw(new);
+#endif
     /* setup to return after 0 seconds
         ..if no characters are received
         TIME units are assumed to be 0.1 secs */
