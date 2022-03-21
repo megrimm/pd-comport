@@ -90,6 +90,7 @@ typedef struct comport
     int             rxerrors; /* holds the rx line errors */
 
     int             x_verbose; /* be more verbose */
+    t_bool          x_inprocess; /* nonzero if we want to enable autoprocessing of input */
 
   /* buffers */
     unsigned char   *x_inbuf; /* read incoming serial to here */
@@ -973,13 +974,17 @@ static int open_serial(unsigned int com_num, t_comport *x)
     new->c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 
     /* don't process input */
-    new->c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+    if(!x->x_inprocess) {
+        new->c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+    }
 
     /* no post processing */
     new->c_oflag &= ~OPOST;
 #else
     /* set to raw mode */
-    cfmakeraw(new);
+    if(!x->x_inprocess) {
+        cfmakeraw(new);
+    }
 #endif
     /* setup to return after 0 seconds
         ..if no characters are received
@@ -1442,6 +1447,7 @@ allows COM port numbers to be specified. */
     clock_delay(x->x_clock, x->x_deltime);
 
     x->x_verbose = 0;
+    x->x_inprocess = 0;
 
     return x;
 }
@@ -1995,6 +2001,12 @@ static void comport_set_verbose(t_comport *x, t_floatarg f)
     x->x_verbose = f;
     comport_verbose("[comport] verbose is on: %d", x->x_verbose);
 }
+static void comport_set_inprocess(t_comport *x, t_floatarg f)
+{
+  x->x_inprocess = (f>=1.);
+    comport_verbose("[comport] input processing for newly opened devices is %s",
+        x->x_inprocess?"on":"off");
+}
 
 static void comport_help(t_comport *x)
 {
@@ -2060,6 +2072,7 @@ void comport_setup(void)
     class_addmethod(comport_class, (t_method)comport_pollintervall, gensym("pollintervall"), A_FLOAT, 0);
     class_addmethod(comport_class, (t_method)comport_retries, gensym("retries"), A_FLOAT, 0);
     class_addmethod(comport_class, (t_method)comport_set_verbose, gensym("verbose"), A_FLOAT, 0);
+    class_addmethod(comport_class, (t_method)comport_set_inprocess, gensym("inputprocess"), A_FLOAT, 0);
     class_addmethod(comport_class, (t_method)comport_help, gensym("help"), 0);
     class_addmethod(comport_class, (t_method)comport_info, gensym("info"), 0);
     class_addmethod(comport_class, (t_method)comport_devices, gensym("devices"), 0);
