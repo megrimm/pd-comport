@@ -262,6 +262,7 @@ static int set_break(t_comport *x, int on);
 static int set_rts(t_comport *x, int nr);
 static int set_xonxoff(t_comport *x, int nr);
 static int set_serial(t_comport *x);
+static int set_hupcl(t_comport *x, int nr);
 static int write_serial(t_comport *x, unsigned char serial_byte);
 static int write_serials(t_comport *x, unsigned char *serial_buf, int buf_length);
 static int comport_get_dsr(t_comport *x);
@@ -270,7 +271,6 @@ static int comport_get_cts(t_comport *x);
 static HANDLE open_serial(unsigned int com_num, t_comport *x);
 static HANDLE close_serial(t_comport *x);
 #else
-static int set_hupcl(t_comport *x, int nr);
 static int open_serial(unsigned int com_num, t_comport *x);
 static int close_serial(t_comport *x);
 static long get_baud_ratebits(t_comport*x, long *baud);
@@ -474,6 +474,8 @@ static int set_serial(t_comport *x)
 static int set_hupcl(t_comport *x, int nr)
 {
     // this is a dummy function since Windows doesn't use HUPCL, AFAIK hans@eds.org
+  (void)x;
+  (void)nr;
 }
 
 static HANDLE open_serial(unsigned int com_num, t_comport *x)
@@ -1685,9 +1687,7 @@ static void comport_xonxoff(t_comport *x,t_floatarg f)
 
 static void comport_hupcl(t_comport *x,t_floatarg f)
 {
-#ifndef _WIN32
-	set_hupcl(x,f);
-#endif
+	set_hupcl(x, f);
 }
 
 static void comport_close(t_comport *x)
