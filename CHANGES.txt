@@ -1,3 +1,16 @@
+1.2 - 2022-03-21
+
+  * fix building with Pd>=0.52
+
+  * turn off automagic input processing that mostly gets in our way
+    (thanks: christof ressi)
+
+  * allow the user to specify the device pattern
+
+  * update pd-lib-builder Makefile
+
+  * automatic deken release for multiple platforms
+
 1.1.1 - 2017-03-08
   
   * fixed for Windows 10 (was hanging before)
