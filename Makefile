@@ -2,6 +2,8 @@
 
 lib.name = comport
 
+with-bird=no
+
 class.sources = comport.c
 
 datafiles = \
@@ -12,6 +14,13 @@ datafiles = \
 	LICENSE.txt \
 	README.txt \
 	$(empty)
+
+
+ifeq ($(with-bird),yes)
+ class.sources += bird/bird.c
+ datafiles += bird/bird-help.pd
+endif
+
 
 # This Makefile is based on the Makefile from pd-lib-builder written by
 # Katja Vetter. You can get it from:
