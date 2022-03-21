@@ -1824,7 +1824,7 @@ static void comport_enum(t_comport *x)
 
 static void comport_ports(t_comport *x)
 { /* the same as comport_enum except outputs list of available ports on status outlet */
-    unsigned int    i, j = 0;
+    unsigned int    i;
     t_atom          output_atom[2];
 #ifdef _WIN32
     HANDLE          fd;
@@ -1879,7 +1879,7 @@ static void comport_ports(t_comport *x)
             break;
 # endif /* GLOB_NOMATCH */
     }
-    for(i = 0; (i < glob_buffer.gl_pathc) && (j < COMPORT_MAX); i++)
+    for(i = 0; (i < glob_buffer.gl_pathc) && (i < COMPORT_MAX); i++)
     {
 /* now try to open the device */
         if((fd = open(glob_buffer.gl_pathv[i], OPENPARAMS)) != INVALID_HANDLE_VALUE)
