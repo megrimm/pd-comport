@@ -2022,24 +2022,25 @@ static void comport_help(t_comport *x)
 
     post("  Methods:");
     post("   baud <baud>       ... set baudrate to nearest possible baud\n"
-        "   bits <bits>       ... set number of bits (7 or 8)\n"
-        "   stopbit <0|1>     ... set off|on stopbit\n"
-        "   rtscts <0|1>      ... set rts/cts off|on\n"
-        "   parity <0|1>      ... set parity off|on\n"
-        "   xonxoff <0|1>     ... set xon/xoff off|on\n"
-        "   dtr <0|1>         ... set dtr off|on\n"
-        "   rts <0|1>         ... set rts off|on\n"
-        "   hupcl <0|1>       ... set hang-up on close off|on\n"
-        "   close             ... close device\n"
-        "   open <num>        ... open device number num\n"
-        "   devicename <d>    ... set device name to d (eg. /dev/ttyS8)\n"
-        "   print <list>      ... print list of atoms on serial\n"
-        "   pollintervall <t> ... set poll interval to t ticks\n"
-        "   verbose <level>   ... for debug set verbosity to level\n"
-        "   info              ... output info on status outlet\n"
-        "   devices           ... post list of available devices\n"
-        "   ports             ... output list of available devices on status outlet\n"
-        "   help              ... post this help");
+         "   bits <bits>       ... set number of bits (7 or 8)\n"
+         "   stopbit <0|1>     ... set off|on stopbit\n"
+         "   rtscts <0|1>      ... set rts/cts off|on\n"
+         "   parity <0|1>      ... set parity off|on\n"
+         "   xonxoff <0|1>     ... set xon/xoff off|on\n"
+         "   dtr <0|1>         ... set dtr off|on\n"
+         "   rts <0|1>         ... set rts off|on\n"
+         "   hupcl <0|1>       ... set hang-up on close off|on\n"
+         "   close             ... close device\n"
+         "   open <num>        ... open device number num\n"
+         "   devicename <d>    ... set device name to d (eg. /dev/ttyS8)\n"
+         "   print <list>      ... print list of atoms on serial\n"
+         "   pollintervall <t> ... set poll interval to t ticks\n"
+         "   verbose <level>   ... for debug set verbosity to level\n"
+         "   inprocess <0|1>   ... set input-processing off|on\n"
+         "   info              ... output info on status outlet\n"
+         "   devices           ... post list of available devices\n"
+         "   ports             ... output list of available devices on status outlet\n"
+         "   help              ... post this help");
 }
 
 /* ---------------- SETUP OBJECTS ------------------ */
