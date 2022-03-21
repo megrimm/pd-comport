@@ -110,7 +110,7 @@ typedef struct comport
 #define COMPORT_BUF_SIZE 16384 /* this should be the largest possible packet size for a USB com port */
 
 #ifdef _WIN32
-/* we don't use the  table for windos cos we can set the number directly. */
+/* we don't use the  table for msw, because we can set the number directly. */
 /* This may result in more possible baud rates than the table contains. */
 /*
 static long baudspeedbittable[] =

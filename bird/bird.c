@@ -236,7 +236,7 @@ void bird_set(bird_t *this,char *cmdname,long *cmddata)
   }
 
   /* CMD found */
-  if(cmd->databytes > 0){  /* if databytes awaited, else dont change */
+  if(cmd->databytes > 0){  /* if databytes awaited, else don't change */
 
 	 this->databytes = cmd->databytes; /* expected databytes per record */
 	 this->datacount = 0;              /* start with first */
