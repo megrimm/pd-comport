@@ -77,7 +77,7 @@ typedef struct comport
 
   /* device configuration */
     int             baud; /* holds the current baud rate */
-    t_float         data_bits; /* holds the current number of data bits */
+    int             data_bits; /* holds the current number of data bits */
     t_float         parity_bit; /* holds the current parity */
     t_float         stop_bits; /* holds the current number of stop bits */
     int             xonxoff; /* nonzero if xonxoff handshaking is on */
@@ -250,7 +250,7 @@ static void comport_pollintervall(t_comport *x, t_floatarg g);
 static void comport_retries(t_comport *x, t_floatarg g);
 static void comport_tick(t_comport *x);
 static int set_baudrate(t_comport *x, int baud);
-static float set_bits(t_comport *x, int nr);
+static int set_bits(t_comport *x, int nr);
 static float set_parity(t_comport *x,int n);
 static float set_stopflag(t_comport *x, t_float nr);
 static int set_ctsrts(t_comport *x, int nr);
@@ -331,7 +331,7 @@ static int set_baudrate(t_comport *x, int baud)
 
 /* bits are 5,6,7,8(default) */
 
-static float set_bits(t_comport *x, int nr)
+static int set_bits(t_comport *x, int nr)
 {
     if(nr < 4 && nr > 8) nr = 8;
 
@@ -734,7 +734,7 @@ static int set_baudrate(t_comport *x, int ibaud)
 
 /* bits are 5,6,7,8(default) */
 
-static float set_bits(t_comport *x, int nr)
+static int set_bits(t_comport *x, int nr)
 {
     struct termios *tio = &(x->com_termio);
     tio->c_cflag &= ~CSIZE;
@@ -1482,9 +1482,9 @@ static void comport_baud(t_comport *x,t_floatarg f)
 #endif
 }
 
-static void comport_bits(t_comport *x,t_floatarg f)
+static void comport_bits(t_comport *x,t_floatarg fbits)
 {
-    f = set_bits(x,f);
+    int bits = set_bits(x,fbits);
 
     if(x->comhandle == INVALID_HANDLE_VALUE)return;
 
@@ -1498,13 +1498,13 @@ static void comport_bits(t_comport *x,t_floatarg f)
 #endif
         return;
     }
-    else comport_verbose("[comport] set bits of %s to %g\n",
+    else comport_verbose("[comport] set bits of %s to %d\n",
 #ifdef _WIN32
-            &x->serial_device->s_name[4], f);
+            &x->serial_device->s_name[4], bits);
 #else
-            x->serial_device->s_name, f);
+            x->serial_device->s_name, bits);
 #endif
-    x->data_bits = f;
+    x->data_bits = bits;
 }
 
 
