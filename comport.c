@@ -77,7 +77,7 @@ typedef struct comport
 
   /* device specifications */
     t_symbol        *serial_device;
-    char            serial_device_prefix[FILENAME_MAX];/* the device name without the number */
+    char            serial_device_prefix[MAXPDSTRING];/* the device name without the number */
     short           comport; /* holds the comport # */
 
   /* device configuration */
@@ -1361,7 +1361,7 @@ allows COM port numbers to be specified. */
 #ifdef _WIN32
     strncpy_s(test.serial_device_prefix, strlen(serial_device_prefix) + 1, serial_device_prefix, strlen(serial_device_prefix) + 1);
 #else
-    strncpy(test.serial_device_prefix, serial_device_prefix, strlen(serial_device_prefix) + 1);
+    strncpy(test.serial_device_prefix, serial_device_prefix, MAXPDSTRING);
 #endif
     test.baud = ibaud;
     test.data_bits = 8; /* default 8 data bits */
@@ -1383,7 +1383,7 @@ allows COM port numbers to be specified. */
 #ifdef _WIN32
     strncpy_s(x->serial_device_prefix, strlen(serial_device_prefix) + 1, serial_device_prefix, strlen(serial_device_prefix) + 1);
 #else
-    strncpy(x->serial_device_prefix, serial_device_prefix, strlen(serial_device_prefix) + 1);
+    strncpy(x->serial_device_prefix, serial_device_prefix, MAXPDSTRING);
 #endif
     x->serial_device = test.serial_device; /* we need this so 'help' doesn't crash */
 
