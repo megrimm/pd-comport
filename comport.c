@@ -19,6 +19,10 @@ MP 20071011 added comport_list and write_serials for list processing based on co
 MP 20071113 modified non-windows open_serial to set the index of the port when it's opened by name
 MP 20080916 fixed Windows version stop bits to set and display 1, 1.5 or 2 for "stopbits" input of 1, 1.5 or 2
 MP 20100201 use a buffer for writes, write takes place during clock callback comport_tick()
+
+CR 20190514 disable input processing
+JZ 20210321 purge error() in favour of pd_error()
+JZ 20210321 cleanup t_comport struct
 */
 
 #include "m_pd.h"
@@ -72,7 +76,7 @@ typedef struct comport
     short           comport; /* holds the comport # */
 
   /* device configuration */
-    t_float         baud; /* holds the current baud rate */
+    int             baud; /* holds the current baud rate */
     t_float         data_bits; /* holds the current number of data bits */
     t_float         parity_bit; /* holds the current parity */
     t_float         stop_bits; /* holds the current number of stop bits */
@@ -245,7 +249,7 @@ t_class *comport_class;
 static void comport_pollintervall(t_comport *x, t_floatarg g);
 static void comport_retries(t_comport *x, t_floatarg g);
 static void comport_tick(t_comport *x);
-static float set_baudrate(t_comport *x, t_float baud);
+static int set_baudrate(t_comport *x, int baud);
 static float set_bits(t_comport *x, int nr);
 static float set_parity(t_comport *x,int n);
 static float set_stopflag(t_comport *x, t_float nr);
@@ -319,7 +323,7 @@ void comport_setup(void);
 
 #ifdef _WIN32
 
-static float set_baudrate(t_comport *x,t_float baud)
+static int set_baudrate(t_comport *x, int baud)
 {
     x->dcb.BaudRate = (DWORD)baud ;//!!!try directly setting any baud rate...was get_baud_ratebits(&baud);
     return baud;
@@ -474,7 +478,7 @@ static HANDLE open_serial(unsigned int com_num, t_comport *x)
     HANDLE          fd;
     COMMTIMEOUTS    timeouts;
     char            buffer[MAX_PATH];
-    float           *baud = &(x->baud);
+    int            *baud = &(x->baud);
     DWORD           dw;
     int             i;
     char            *errStr;
@@ -713,10 +717,10 @@ static long get_baud_ratebits(t_comport *x, long *baud)
     return baudspeedbittable[i];
 }
 
-static float set_baudrate(t_comport *x, t_float fbaud)
+static int set_baudrate(t_comport *x, int ibaud)
 {
     struct termios  *tio = &(x->com_termio);
-    long            baud = fbaud;
+    long            baud = ibaud;
     speed_t         baudbits = get_baud_ratebits(x, &baud);
 
     comport_verbose("[comport] set_baudrate: Setting baud rate to %g with baudbits 0x%X", baud, baudbits);
@@ -884,7 +888,7 @@ static int open_serial(unsigned int com_num, t_comport *x)
     unsigned int    i;
     struct termios  *old = &(x->oldcom_termio);
     struct termios  *new = &(x->com_termio);
-    float           *baud = &(x->baud);
+    int             *baud = &(x->baud);
     glob_t          glob_buffer;
 
     /* if com_num == USE_DEVICENAME, use device name directly, else try port # */
@@ -1312,7 +1316,7 @@ static void *comport_new(t_symbol *s, int argc, t_atom *argv)
     HANDLE    fd;
     const char *serial_device_prefix;
     t_float com_num = 0;
-    t_float fbaud = 9600;
+    int ibaud = 9600;
     (void)s; /* squelch unused-parameter warning */
 
 #ifdef _WIN32
@@ -1337,7 +1341,7 @@ allows COM port numbers to be specified. */
     if(argc > 0 && argv->a_type == A_FLOAT)
         com_num = atom_getfloatarg(0,argc,argv);
     if(argc > 1)
-        fbaud = atom_getfloatarg(1,argc,argv);
+        ibaud = atom_getfloatarg(1,argc,argv);
 
 /*	 Open the Comport for RD and WR and get a handle */
 /* this line should use a real serial device */
@@ -1347,7 +1351,7 @@ allows COM port numbers to be specified. */
 #else
     strncpy(test.serial_device_prefix, serial_device_prefix, strlen(serial_device_prefix) + 1);
 #endif
-    test.baud = fbaud;
+    test.baud = ibaud;
     test.data_bits = 8; /* default 8 data bits */
     test.parity_bit = 0;/* default no parity bit */
 #ifdef _WIN32
@@ -1453,7 +1457,7 @@ static void comport_baud(t_comport *x,t_floatarg f)
 {
     if(f == x->baud)
     {
-        comport_verbose("[comport] baudrate already %g\n",x->baud);
+        comport_verbose("[comport] baudrate already %d\n",x->baud);
         return;
     }
 
@@ -1470,7 +1474,7 @@ static void comport_baud(t_comport *x,t_floatarg f)
             x->serial_device->s_name);
 #endif
     }
-    else comport_verbose("[comport] set baudrate of %s to %g\n",
+    else comport_verbose("[comport] set baudrate of %s to %d\n",
 #ifdef _WIN32
             &x->serial_device->s_name[4], x->baud);
 #else
@@ -1990,7 +1994,7 @@ static void comport_set_verbose(t_comport *x, t_floatarg f)
 
 static void comport_help(t_comport *x)
 {
-    post("[comport] serial port %d (baud %g):", x->comport, x->baud);
+    post("[comport] serial port %d (baud %d):", x->comport, x->baud);
     if(x->comport >= 0 && x->comport < COMPORT_MAX)
     {
 #ifdef WIN32
