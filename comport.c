@@ -84,7 +84,7 @@ typedef struct comport
     int             ctsrts; /* nonzero if ctsrts handshaking is on */
     int             hupcl; /* nonzero if hang-up on close is on */
 
-    short           rxerrors; /* holds the rx line errors */
+    int             rxerrors; /* holds the rx line errors */
     int             verbose;
 
   /* buffers */
