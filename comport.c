@@ -50,7 +50,7 @@ JZ 20210321 cleanup t_comport struct
 #include <errno.h>
 #include <stdio.h>
 
-#define comport_verbose if(x->verbose > 0)post
+#define comport_verbose if(x->x_verbose > 0)post
 
 
 #define t_bool char
@@ -89,7 +89,7 @@ typedef struct comport
 
     int             rxerrors; /* holds the rx line errors */
 
-    int             verbose; /* be more verbose */
+    int             x_verbose; /* be more verbose */
 
   /* buffers */
     unsigned char   *x_inbuf; /* read incoming serial to here */
@@ -1441,7 +1441,7 @@ allows COM port numbers to be specified. */
 
     clock_delay(x->x_clock, x->x_deltime);
 
-    x->verbose = 0;
+    x->x_verbose = 0;
 
     return x;
 }
@@ -1992,8 +1992,8 @@ static void comport_info(t_comport *x)
 /* ---------------- HELPER ------------------------- */
 static void comport_set_verbose(t_comport *x, t_floatarg f)
 {
-    x->verbose = f;
-    comport_verbose("[comport] verbose is on: %d", (int) f);
+    x->x_verbose = f;
+    comport_verbose("[comport] verbose is on: %d", x->x_verbose);
 }
 
 static void comport_help(t_comport *x)
