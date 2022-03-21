@@ -50,7 +50,11 @@ MP 20100201 use a buffer for writes, write takes place during clock callback com
 
 typedef struct comport
 {
+  /* basic object properties */
     t_object        x_obj;
+    t_outlet        *x_data_outlet;
+    t_outlet        *x_status_outlet;
+
 #ifdef _WIN32
     HANDLE          comhandle; /* holds the comport handle */
     DCB             dcb; /* holds the comm pars */
@@ -62,10 +66,12 @@ typedef struct comport
     struct termios  com_termio; /* for the new com config */
 #endif
 
+  /* device specifications */
     t_symbol        *serial_device;
     char            serial_device_prefix[FILENAME_MAX];/* the device name without the number */
     short           comport; /* holds the comport # */
 
+  /* device configuration */
     t_float         baud; /* holds the current baud rate */
     t_float         data_bits; /* holds the current number of data bits */
     t_float         parity_bit; /* holds the current parity */
@@ -75,19 +81,21 @@ typedef struct comport
     int             hupcl; /* nonzero if hang-up on close is on */
 
     short           rxerrors; /* holds the rx line errors */
-    t_clock         *x_clock;
-    int             x_hit;
-    int             x_retries;
-    int             x_retry_count;
-    double          x_deltime;
     int             verbose;
-    t_outlet        *x_data_outlet;
-    t_outlet        *x_status_outlet;
+
+  /* buffers */
     unsigned char   *x_inbuf; /* read incoming serial to here */
     unsigned char   *x_outbuf; /* write outgoing serial from here */
     int             x_inbuf_len; /* length of inbuf */
     int             x_outbuf_len; /* length of outbuf */
     int             x_outbuf_wr_index; /* offset to next free location in x_outbuf */
+
+  /* self-polling */
+    t_clock         *x_clock;
+    double          x_deltime;
+    int             x_hit;
+    int             x_retries;
+    int             x_retry_count;
 } t_comport;
 
 #ifndef TRUE
