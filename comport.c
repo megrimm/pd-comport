@@ -1533,9 +1533,9 @@ static void comport_parity(t_comport *x,t_floatarg f)
     x->parity_bit = f;
 }
 
-static void comport_stopbit(t_comport *x, t_floatarg f)
+static void comport_stopbit(t_comport *x, t_floatarg fstop)
 {
-    f = set_stopflag(x, f);
+    t_float stop = set_stopflag(x, fstop);
 
     if(x->comhandle == INVALID_HANDLE_VALUE)return;
 
@@ -1543,7 +1543,7 @@ static void comport_stopbit(t_comport *x, t_floatarg f)
     {
 #ifdef _WIN32
         pd_error(x,"[comport] ** ERROR ** could not set stopbits of device %s to %g\n",
-            &x->serial_device->s_name[4], f);
+            &x->serial_device->s_name[4], stop);
 #else
         pd_error(x,"[comport] ** ERROR ** could not set extra stopbit of device %s\n",
             x->serial_device->s_name);
@@ -1553,12 +1553,12 @@ static void comport_stopbit(t_comport *x, t_floatarg f)
     else comport_verbose
 #ifdef _WIN32
         ("[comport] set stopbits of %s to %g\n",
-            &x->serial_device->s_name[4], f);
+            &x->serial_device->s_name[4], stop);
 #else
         ("[comport] set extra stopbit of %s to %g\n",
-            x->serial_device->s_name, f);
+            x->serial_device->s_name, stop);
 #endif
-    x->stop_bits = f;
+    x->stop_bits = stop;
 }
 
 static void comport_rtscts(t_comport *x,t_floatarg f)
