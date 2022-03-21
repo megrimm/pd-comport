@@ -2,6 +2,9 @@ comport - PD External for the serial Ports
 
 Institute for Electronic Music and Acoustics
 Copyright (C) 1998-2005 Winfried Ritsch
+ © 2005-2012 Hans-Christoph Steiner
+ © 2006-2015 Martin Peach
+ © 1998-2022 the Pd community
 
 
 This program is free software; you can redistribute it and/or
